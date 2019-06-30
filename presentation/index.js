@@ -1,5 +1,10 @@
 // Import React
 import React from "react";
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+import js from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript';
+import docco from 'react-syntax-highlighter/dist/esm/styles/hljs/docco';
+
+SyntaxHighlighter.registerLanguage('javascript', js);
 
 // Import Spectacle Core tags
 import {
@@ -47,38 +52,90 @@ const theme = createTheme({
 export default class Presentation extends React.Component {
   render() {
     return (
-      <Deck transition={["zoom", "slide"]} transitionDuration={500} theme={theme}>
+      <Deck transition={["zoom", "slide"]} transitionDuration={500} theme={theme} contentWidth={1400}>
 
         <Slide transition={["zoom"]} bgImage={images.intro.replace("/", "")}>
           <Heading size={1} fit caps lineHeight={1} textColor="secondary">
-            Redux Talk
+            TypeScript Generics
           </Heading>
         </Slide>
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={6} textColor="primary" caps>Discussion Topics</Heading>
+          <Heading size={6} textColor="primary" caps>Generics</Heading>
           <List>
-            <Appear><ListItem>Software Architecture</ListItem></Appear>
-            <Appear><ListItem>Presentational and Container Components</ListItem></Appear>
-            <Appear><ListItem>Project Structure</ListItem></Appear>
+            <Appear><ListItem>A powerful tool for building reusable components</ListItem></Appear>
+            <Appear><ListItem>Allows you to dynamically define `<i>type variables</i>` </ListItem></Appear>
+            <Appear><ListItem>Better alternative to the `<i>any</i>` data type</ListItem></Appear>
           </List>
         </Slide>
-        {/* 
-          - Redux is a big topic
-          - Lots to talk about eg FP
-          - Made a prototype for an uber enterprise level architecture
-          - I've architected a couple of commercial projects from scratch an would like to share a couple of patterns that I expect you are already familiar with
-          - Decided to keep it simple and keep to three basic topics
-          - Format
-            - Introduction
-            - Examples
-            - Pros and Cons
-            - Group Discussion
-        */}
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Pros</Heading>
+          <List>
+            <Appear><ListItem>Type Abstraction</ListItem></Appear>
+            <Appear><ListItem>Type Safety</ListItem></Appear>
+            <Appear><ListItem>IDE code completion</ListItem></Appear>
+          </List>
+        </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Cons</Heading>
+          <List>
+            <Appear><ListItem>Advanced Topic</ListItem></Appear>
+            <Appear><ListItem>Syntax can be confusing</ListItem></Appear>
+            <Appear><ListItem>Complexity with HOCs and Redux</ListItem></Appear>
+          </List>
+        </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Type Variables</Heading>
+          <List>
+            <Appear><ListItem>Conventional naming: T, U, V</ListItem></Appear>
+            <Appear><ListItem>Custom naming: ItemT, ItemType, FooThing</ListItem></Appear>
+            <Appear><ListItem>Defined in ankle brackets: &lt;T&gt;</ListItem></Appear>
+          </List>
+        </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Type Inference</Heading>
+          <List>
+            <ListItem>TypeScript can <i>implicitly</i> infer (and then check) variables</ListItem>
+          </List>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`
+ // Type of x is number
+ let x = 3
+ // Error: Type "foobar" is not assignable to type 'number'
+ x = 'foobar'
+            `}
+          </SyntaxHighlighter>
+        </Slide>
+        
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Type Assertion</Heading>
+          <List>
+            <Appear><ListItem>TypeScript allows you to <i>explicitly</i> set variable types</ListItem></Appear>
+            <Appear><ListItem>Useful for working with third party APIs</ListItem></Appear>
+          </List>
+        </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>As const</Heading>
+          <List>
+            <Appear><ListItem>Makes variables immutable</ListItem></Appear>
+            <Appear><ListItem>Useful fix for unknown types</ListItem></Appear>
+            <Appear><ListItem>Literal types do not get widened eg 'hello' to `string`</ListItem></Appear>
+            <Appear><ListItem>Object literal properties become `readonly`</ListItem></Appear>
+            <Appear><ListItem>Arrays become `readonly`</ListItem></Appear>
+          </List>
+        </Slide>
 
         <Slide transition={["fade"]} bgImage={images.goal.replace("/", "")} bgDarken={0.75} bgColor="secondary">
-          <Heading size={1} textColor="primary">Goal!</Heading>
-          <Text size={2} textColor="primary">Find ways in which we can improve software architecture at Calvium</Text>
+          <Heading size={6} textColor="primary" caps>Codez</Heading>
+          <SyntaxHighlighter language="javascript" style={docco}>
+            {'(num) => num + 1\n' +
+            'new line'}
+          </SyntaxHighlighter>
         </Slide>
         {/* 
           - React and Redux are libs not frameworks (unopinionated) so you free to strucutre them as you please
@@ -126,20 +183,6 @@ export default class Presentation extends React.Component {
           - Secure - does it provide quality assurance eg confidentially and integrity?
           - Easy onboarding - low entry barrier for new developers?
         */}
-
-         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Gropu Feedback</Heading>
-          <List>
-            <Appear><ListItem>Maintainability</ListItem></Appear>
-            <Appear><ListItem>Modular</ListItem></Appear>
-            <Appear><ListItem>KISS</ListItem></Appear>
-            <Appear><ListItem>Consistency</ListItem></Appear>
-            <Appear><ListItem>Readability</ListItem></Appear>
-            <Appear><ListItem>Consistency</ListItem></Appear>
-            <Appear><ListItem>Scalebility</ListItem></Appear>
-          </List>
-        </Slide>  
-         
 
         <Slide transition={["fade"]} textColor="primary" bgColor="secondary">
           <Heading size={1} textColor="primary">3 Rs of Software Architecture</Heading>
@@ -238,20 +281,6 @@ export default class Presentation extends React.Component {
           </List>
         </Slide> 
         {/* PureComponents solve performance and issues above */}
-
-        {/* <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Gropu Feedback</Heading>
-          <List>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-          </List>
-        </Slide>  
-         */}
 
         <Slide transition={["fade"]} bgColor="secondary">
           <Heading size={1} textColor="primary">Application Structure</Heading>
@@ -358,36 +387,6 @@ export default class Presentation extends React.Component {
           - More boilerplate - eg more files to create
           - Dev convience - more files to jump around
         */}
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={6} textColor="primary" caps>Further Discussion</Heading>
-          <List>
-            <Appear><ListItem>State - containers or redux eg API calls</ListItem></Appear>
-            <Appear><ListItem>Business Logic - containers, thunks or actions, reducers and selectors?</ListItem></Appear>
-            <Appear><ListItem>Reuse - HOCs, render props &amp; hooks</ListItem></Appear>
-          </List>
-        </Slide>
-
-        {/* <Slide transition={["fade"]} bgImage={images.lego.replace("/", "")} bgDarken={0.75} bgColor="primary">
-          <Heading size={1} textColor="primary">HOCs</Heading>
-          <BlockQuote fit>
-            <Quote textSize="48">A higher order component is a function that takes a component and returns a new component.  <br/><br/> Used to share common functionality between components without repeating code.</Quote>
-            <Cite>React Docs</Cite>
-          </BlockQuote>
-        </Slide> */}
-
-        <Slide transition={["fade"]} bgColor="secondary">
-          <Heading size={1} textColor="primary">Other News</Heading>
-        </Slide>
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={1} textColor="primary">React Hooks</Heading>
-          <List>
-            <Appear><ListItem>Announced on Oct 25 2018</ListItem></Appear>
-            <Appear><ListItem>No more classes</ListItem></Appear>
-            <Appear><ListItem>Pure function hooks eg useState, useEffect</ListItem></Appear>
-          </List>          
-        </Slide>
 
       </Deck>
     );
