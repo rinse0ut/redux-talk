@@ -186,18 +186,57 @@ let output = identity('foobar')`}
         </Slide>
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={6} textColor="primary" caps>Asserted Call</Heading>
-          <List>
-            <ListItem>Explicitly set type of T</ListItem>
-            <ListItem>Useful in complex scenarios</ListItem>
-          </List>
-          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
-            {`function identity<T>(arg: T): T {
+        <Heading size={6} textColor="primary" caps>Asserted Call</Heading>
+        <List>
+          <ListItem>Explicitly set type of T</ListItem>
+          <ListItem>Useful in complex scenarios</ListItem>
+        </List>
+        <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+          {`function identity<T>(arg: T): T {
   return arg
 }
 
 // type of output is asserted as string
 let output = identity<string>('foobar')
+`}
+        </SyntaxHighlighter>
+      </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Generic Class</Heading>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`/** A class definition with a generic parameter */
+class Queue<T> {
+  private data = [];
+  push(item: T) { this.data.push(item); }
+  pop(): T | undefined { return this.data.shift(); }
+}
+
+/** Again sample usage */
+const queue = new Queue<number>();
+queue.push(0);
+queue.push("1"); // ERROR : cannot push a string. Only numbers allowed
+`}
+          </SyntaxHighlighter>
+        </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>React Component</Heading>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`/** react.d.ts React Component Source Code*/
+class Component<P, S> {
+  constructor(props: Readonly<P>);
+  state: Readonly<S>;
+  // src code...
+}
+
+/** A react class definition with generic assertions */
+type PropTypes = {foo: string, bar: number}
+type StateType = {data: []}
+
+class Screen extends React.Component<PropTypes, StateType> {
+  // userland code...
+}
 `}
           </SyntaxHighlighter>
         </Slide>
