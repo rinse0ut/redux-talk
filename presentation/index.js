@@ -49,6 +49,13 @@ const theme = createTheme({
   secondary: "Helvetica"
 });
 
+const code = `
+// Type of x is inferred as number
+let x = 3
+// Error: Type <string> is not assignable to type 'number'
+x = 'foobar'
+`
+
 export default class Presentation extends React.Component {
   render() {
     return (
@@ -99,24 +106,34 @@ export default class Presentation extends React.Component {
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
           <Heading size={6} textColor="primary" caps>Type Inference</Heading>
           <List>
-            <ListItem>TypeScript can <i>implicitly</i> infer (and then check) variables</ListItem>
+            <ListItem>TypeScript can <i>implicitly</i> infer and then check the type of a variable</ListItem>
           </List>
           <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
-            {`
- // Type of x is number
- let x = 3
- // Error: Type "foobar" is not assignable to type 'number'
- x = 'foobar'
-            `}
+            {`// Type of x is inferred as number
+let x = 3
+
+// Error: Type "'foobar'" is not assignable to type 'number'
+x = 'foobar'`}
           </SyntaxHighlighter>
         </Slide>
-        
+
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
           <Heading size={6} textColor="primary" caps>Type Assertion</Heading>
           <List>
-            <Appear><ListItem>TypeScript allows you to <i>explicitly</i> set variable types</ListItem></Appear>
-            <Appear><ListItem>Useful for working with third party APIs</ListItem></Appear>
+            <ListItem>TypeScript allows you to <i>explicitly</i> set variable types</ListItem>
+            <ListItem>Useful for working with third party APIs</ListItem>
           </List>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`let foo: any
+
+// bar is of type string
+let bar = <string> foo`}
+          </SyntaxHighlighter>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`// preferred JSX syntax
+let bar = foo as string
+            `}
+          </SyntaxHighlighter>
         </Slide>
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
@@ -124,25 +141,66 @@ export default class Presentation extends React.Component {
           <List>
             <Appear><ListItem>Makes variables immutable</ListItem></Appear>
             <Appear><ListItem>Useful fix for unknown types</ListItem></Appear>
-            <Appear><ListItem>Literal types do not get widened eg 'hello' to `string`</ListItem></Appear>
+            <Appear><ListItem>Literal types do not get widened eg "hello" to `string`</ListItem></Appear>
             <Appear><ListItem>Object literal properties become `readonly`</ListItem></Appear>
             <Appear><ListItem>Arrays become `readonly`</ListItem></Appear>
           </List>
         </Slide>
 
-        <Slide transition={["fade"]} bgImage={images.goal.replace("/", "")} bgDarken={0.75} bgColor="secondary">
-          <Heading size={6} textColor="primary" caps>Codez</Heading>
-          <SyntaxHighlighter language="javascript" style={docco}>
-            {'(num) => num + 1\n' +
-            'new line'}
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Identity Function</Heading>
+          <List>
+            <ListItem>A function that always returns the same value that was used as it's argument</ListItem>
+          </List>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`function identity(arg: number): number {
+  return arg
+}
+
+// type of output is number
+let output = identity(42)
+
+// error: typescript expects a number not a string
+let output = identity('foobar')`}
           </SyntaxHighlighter>
         </Slide>
-        {/* 
-          - React and Redux are libs not frameworks (unopinionated) so you free to strucutre them as you please
-          - Important to understand the problem, possible solutions and trade offs
-          - Current architecture is pragmatic often done under tight deadlines
-          - Hopefully we will have time to discuss your ideas
-        */}
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Hello Generics</Heading>
+          <List>
+            <ListItem>&lt;T&gt; is the type variable definition</ListItem>
+            <ListItem>Function argument is of type T</ListItem>
+            <ListItem>Return value is also of type T</ListItem>
+          </List>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`function identity<T>(arg: T): T {
+  return arg
+}
+
+// type of output is inferred as number
+let output = identity(42)
+
+// type of output is inferred as string
+let output = identity('foobar')`}
+          </SyntaxHighlighter>
+        </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Asserted Call</Heading>
+          <List>
+            <ListItem>Explicitly set type of T</ListItem>
+            <ListItem>Useful in complex scenarios</ListItem>
+          </List>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`function identity<T>(arg: T): T {
+  return arg
+}
+
+// type of output is asserted as string
+let output = identity<string>('foobar')
+`}
+          </SyntaxHighlighter>
+        </Slide>
 
         <Slide transition={["fade"]} bgImage={images.lego.replace("/", "")} bgDarken={0.75} bgColor="primary">
           <BlockQuote fit>
