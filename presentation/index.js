@@ -25,15 +25,7 @@ import {
 import createTheme from "spectacle/lib/themes/default";
 
 const images = {
-  intro: require("../assets/redux-talk.jpg"),
-  goal: require("../assets/goal.jpg"),
-  lego: require("../assets/lego.jpg"),
-  pyramid: require("../assets/software-architecture-pyramid.png"),
-  fileStruct: require("../assets/file-struct.png"),
-  blogStruct: require("../assets/blog-struct.png"),
-  shopStruct: require("../assets/shop-struct.png"),
-  pure: require("../assets/pure.png"),
-  container: require("../assets/container.png"),
+  intro: require("../assets/typescript-generics.png"),
 };
 
 // Require CSS
@@ -62,17 +54,14 @@ export default class Presentation extends React.Component {
       <Deck transition={["zoom", "slide"]} transitionDuration={500} theme={theme} contentWidth={1400}>
 
         <Slide transition={["zoom"]} bgImage={images.intro.replace("/", "")}>
-          <Heading size={1} fit caps lineHeight={1} textColor="secondary">
-            TypeScript Generics
-          </Heading>
         </Slide>
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
           <Heading size={6} textColor="primary" caps>Generics</Heading>
           <List>
             <Appear><ListItem>A powerful tool for building reusable components</ListItem></Appear>
-            <Appear><ListItem>Allows you to dynamically define `<i>type variables</i>` </ListItem></Appear>
-            <Appear><ListItem>Better alternative to the `<i>any</i>` data type</ListItem></Appear>
+            <Appear><ListItem>Allows you to dynamically define <i>`type variables`</i> </ListItem></Appear>
+            <Appear><ListItem>Better alternative to the <i>`any`</i> data type</ListItem></Appear>
           </List>
         </Slide>
 
@@ -99,7 +88,7 @@ export default class Presentation extends React.Component {
           <List>
             <Appear><ListItem>Conventional naming: T, U, V</ListItem></Appear>
             <Appear><ListItem>Custom naming: ItemT, ItemType, FooThing</ListItem></Appear>
-            <Appear><ListItem>Defined in ankle brackets: &lt;T&gt;</ListItem></Appear>
+            <Appear><ListItem>Defined in angle brackets: &lt;T&gt;</ListItem></Appear>
           </List>
         </Slide>
 
@@ -112,7 +101,7 @@ export default class Presentation extends React.Component {
             {`// Type of x is inferred as number
 let x = 3
 
-// Error: Type "'foobar'" is not assignable to type 'number'
+// ERROR: x is not a number!
 x = 'foobar'`}
           </SyntaxHighlighter>
         </Slide>
@@ -121,13 +110,11 @@ x = 'foobar'`}
           <Heading size={6} textColor="primary" caps>Type Assertion</Heading>
           <List>
             <ListItem>TypeScript allows you to <i>explicitly</i> set variable types</ListItem>
-            <ListItem>Useful for working with third party APIs</ListItem>
+            <ListItem>A compile time construct therefore not called `type casting`</ListItem>
           </List>
           <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
             {`let foo: any
-
-// bar is of type string
-let bar = <string> foo`}
+`}
           </SyntaxHighlighter>
           <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
             {`// preferred JSX syntax
@@ -136,16 +123,16 @@ let bar = foo as string
           </SyntaxHighlighter>
         </Slide>
 
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={6} textColor="primary" caps>As const</Heading>
-          <List>
-            <Appear><ListItem>Makes variables immutable</ListItem></Appear>
-            <Appear><ListItem>Useful fix for unknown types</ListItem></Appear>
-            <Appear><ListItem>Literal types do not get widened eg "hello" to `string`</ListItem></Appear>
-            <Appear><ListItem>Object literal properties become `readonly`</ListItem></Appear>
-            <Appear><ListItem>Arrays become `readonly`</ListItem></Appear>
-          </List>
-        </Slide>
+        {/*<Slide transition={["fade"]} bgColor="secondary" textColor="primary">*/}
+          {/*<Heading size={6} textColor="primary" caps>As const</Heading>*/}
+          {/*<List>*/}
+            {/*<Appear><ListItem>Makes variables immutable</ListItem></Appear>*/}
+            {/*<Appear><ListItem>Useful fix for unknown types</ListItem></Appear>*/}
+            {/*<Appear><ListItem>Literal types do not get widened eg "hello" to `string`</ListItem></Appear>*/}
+            {/*<Appear><ListItem>Object literal properties become `readonly`</ListItem></Appear>*/}
+            {/*<Appear><ListItem>Arrays become `readonly`</ListItem></Appear>*/}
+          {/*</List>*/}
+        {/*</Slide>*/}
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
           <Heading size={6} textColor="primary" caps>Identity Function</Heading>
@@ -160,7 +147,25 @@ let bar = foo as string
 // type of output is number
 let output = identity(42)
 
-// error: typescript expects a number not a string
+// ERROR: arg is not a number!
+let output = identity('foobar')`}
+          </SyntaxHighlighter>
+        </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Any Type</Heading>
+          <List>
+            <ListItem>Allows you to opt out of type checking</ListItem>
+          </List>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`function identity(arg: any): any{
+  return arg
+}
+
+// type of output is any
+let output = identity(42)
+
+// type of output is any
 let output = identity('foobar')`}
           </SyntaxHighlighter>
         </Slide>
@@ -177,16 +182,14 @@ let output = identity('foobar')`}
   return arg
 }
 
-// type of output is inferred as number
-let output = identity(42)
+let output = identity(42) // T is inferred as number
 
-// type of output is inferred as string
-let output = identity('foobar')`}
+let output = identity('foobar') // T is inferred as string`}
           </SyntaxHighlighter>
         </Slide>
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-        <Heading size={6} textColor="primary" caps>Asserted Call</Heading>
+        <Heading size={6} textColor="primary" caps>Setting Function Type Variables</Heading>
         <List>
           <ListItem>Explicitly set type of T</ListItem>
           <ListItem>Useful in complex scenarios</ListItem>
@@ -196,8 +199,9 @@ let output = identity('foobar')`}
   return arg
 }
 
-// type of output is asserted as string
-let output = identity<string>('foobar')
+let output = identity<string>('foobar') // set T to string
+
+let output = identity<string>(23) // ERROR: not a string!
 `}
         </SyntaxHighlighter>
       </Slide>
@@ -205,7 +209,7 @@ let output = identity<string>('foobar')
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
           <Heading size={6} textColor="primary" caps>Generic Class</Heading>
           <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
-            {`/** A class definition with a generic parameter */
+            {`/** A class definition with a generic variable */
 class Queue<T> {
   private data = [];
   push(item: T) { this.data.push(item); }
@@ -215,22 +219,23 @@ class Queue<T> {
 /** Again sample usage */
 const queue = new Queue<number>();
 queue.push(0);
-queue.push("1"); // ERROR : cannot push a string. Only numbers allowed
+queue.push("1"); // ERROR : T is a string not a number!
 `}
           </SyntaxHighlighter>
         </Slide>
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={6} textColor="primary" caps>React Component</Heading>
+          <Heading size={6} textColor="primary" caps>React Components</Heading>
           <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
-            {`/** react.d.ts React Component Source Code*/
+            {`/** React Component with generic variables */
 class Component<P, S> {
   constructor(props: Readonly<P>);
   state: Readonly<S>;
   // src code...
-}
-
-/** A react class definition with generic assertions */
+}`}
+          </SyntaxHighlighter>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`/** Extended React Component with generic variable settings */
 type PropTypes = {foo: string, bar: number}
 type StateType = {data: []}
 
@@ -240,251 +245,6 @@ class Screen extends React.Component<PropTypes, StateType> {
 `}
           </SyntaxHighlighter>
         </Slide>
-
-        <Slide transition={["fade"]} bgImage={images.lego.replace("/", "")} bgDarken={0.75} bgColor="primary">
-          <BlockQuote fit>
-            <Quote textSize="48">Architecture is the fundamental organization of a system embodied in its components, their relationships to each other, and to the environment, and the principles guiding its design and evolution.</Quote>
-            <Cite>[IEEE 1471]</Cite>
-          </BlockQuote>
-        </Slide>
-        {/* 
-          - Important to understand the problem and possible solutions 
-          - Current architecture is pragmatic often done under tight deadlines
-          - Important to make the right decisions at the start of the project as changes are difficult to make after it starts
-        */}
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={6} textColor="primary" caps>What are the attributes of good software architecture?</Heading>
-          <List>
-            <Appear><ListItem>Functional</ListItem></Appear>
-            <Appear><ListItem>Robust</ListItem></Appear>
-            <Appear><ListItem>Maintainability</ListItem></Appear>
-            <Appear><ListItem>Reusability</ListItem></Appear>
-            <Appear><ListItem>Extensibility</ListItem></Appear>
-            <Appear><ListItem>Scalability</ListItem></Appear>
-            <Appear><ListItem>Testability</ListItem></Appear>
-            <Appear><ListItem>Availability</ListItem></Appear>
-            <Appear><ListItem>Secure</ListItem></Appear>
-            <Appear><ListItem>Easy onboarding</ListItem></Appear>
-          </List>
-        </Slide>
-        {/* 
-          - 'ilties'
-          - Functional - does it meet the business requirements?
-          - Robust - is it reliable?
-          - Maintainability - can you make changes easily?
-          - Extensibility - can you easily add new features?
-          - Scalability - can it handle increase work loads?
-          - Testability - is it easily tested?
-          - Availability - does it have high availability? eg PWA
-          - Secure - does it provide quality assurance eg confidentially and integrity?
-          - Easy onboarding - low entry barrier for new developers?
-        */}
-
-        <Slide transition={["fade"]} textColor="primary" bgColor="secondary">
-          <Heading size={1} textColor="primary">3 Rs of Software Architecture</Heading>
-          <List>
-            <Appear><ListItem>Readability</ListItem></Appear>
-            <Appear><ListItem>Reusability</ListItem></Appear>
-            <Appear><ListItem>Refactorability</ListItem></Appear>
-          </List>
-        </Slide>
-        {/* 
-          - 3 more 'ilties'
-        */}
-
-        <Slide transition={["fade"]} bgColor="secondary">
-          <Image src={images.pyramid.replace("/", "")} margin="0px auto 40px" height="100%"/>
-        </Slide>
-        {/* 
-          - Obligatory talk graph
-          - Readability - are things easy to find and understand
-          - Reusability - DRY
-          - Rectorability - true modules
-        */}        
-
-        <Slide transition={["fade"]} bgColor="secondary">
-          <Heading size={1} textColor="primary">Presentational and Container Components</Heading>
-        </Slide>        
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Presentional Components</Heading>
-          <List>
-            <Appear><ListItem>Are concerned with <i>how things look</i></ListItem></Appear>
-            <Appear><ListItem>Functional / Pure components</ListItem></Appear>
-            <Appear><ListItem>No dependencies, eg Redux</ListItem></Appear>
-            <Appear><ListItem>Often allow containment via <i>this.props.children</i></ListItem></Appear>
-            <Appear><ListItem>Don't specify how the data is loaded or mutated</ListItem></Appear>
-            <Appear><ListItem>Rarely have their own state (maybe for UI)</ListItem></Appear>
-            <Appear><ListItem>Examples: Page, Sidebar, List, Button</ListItem></Appear>
-          </List>
-        </Slide>
-
-        <Slide transition={["fade"]} bgColor="secondary" height="100%">
-          <Image src={images.pure.replace("/", "")} margin="0px auto 40px" height="100%"/>
-        </Slide>      
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Container Components</Heading>
-          <List>
-            <Appear><ListItem>Are concerned with <i>how things work</i></ListItem></Appear>
-            <Appear><ListItem>May contain both presentational and container components</ListItem></Appear>
-            <Appear><ListItem>Never have styles except wrapping divs</ListItem></Appear>
-            <Appear><ListItem>Redux uses them as callbacks to the presentational components</ListItem></Appear>
-            <Appear><ListItem>Often stateful as they tend to serve as data sources</ListItem></Appear>
-            {/* Can be stateless as well eg inject state via props */}
-            <Appear><ListItem>Usually generated using higher order components such as connect in Redux</ListItem></Appear>
-            <Appear><ListItem>Examples: UserPage, RefinementsSidebar, PostList</ListItem></Appear>
-          </List>
-        </Slide>
-
-        <Slide transition={["fade"]} bgColor="secondary">
-          <Image src={images.container.replace("/", "")} height="100%"/>
-        </Slide>    
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Pros</Heading>
-          <List>
-            <Appear><ListItem>Better separation of concerns. </ListItem></Appear> 
-            {/* You understand your app and your UI better. */}
-            <Appear><ListItem>Better reusability.  </ListItem></Appear>
-            {/* You can resuse a presentational component with different datasources, and turn those into separate container components that can be further reused */}
-            <Appear><ListItem>Presentational components are essentially your apps palette</ListItem></Appear>
-            {/* Presentational components are the view layer, Containter components are controllers */}
-            <Appear><ListItem>Forces you to extract 'layout components' eg Sidebard, Page </ListItem></Appear>
-            {/* and use this.props.children instead of duplicating the same markup in serveral container components */}
-            <Appear><ListItem>Easy to test pure functions</ListItem></Appear>
-            {/* Deterministic functions without side effects are easy to test */}
-            <Appear><ListItem>Less Bloat and code smells</ListItem></Appear>
-            {/* Bloated Components and Poor Data Structures (eg too many props) are easily spotted */}
-          </List>
-        </Slide>
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Cons</Heading>
-          <List>
-            <Appear><ListItem>Conversion hassle.</ListItem></Appear>
-            {/* eg If the component requires a lifecyle method you have to add a class */}
-            <Appear><ListItem>Messy diffs</ListItem></Appear>
-            {/* eg Adding a class makes it look like you made more changes than you have */}
-            <Appear><ListItem>Inconsistency class vs function</ListItem></Appear>
-            {/* Context switching between classes and functions might be confusing for some developers */}
-            <Appear><ListItem>Classes are familiar to OO developers</ListItem></Appear>
-            {/* Many developers are unfamiliar with FP  */}
-            <Appear><ListItem>Functional Components do not implement ShouldComponentUpdate</ListItem></Appear>
-            {/* and render everytime. PureComponent */}
-            <Appear><ListItem>Yet another decision</ListItem></Appear>
-            {/* Another decision to make */}
-          </List>
-        </Slide> 
-        {/* PureComponents solve performance and issues above */}
-
-        <Slide transition={["fade"]} bgColor="secondary">
-          <Heading size={1} textColor="primary">Application Structure</Heading>
-        </Slide>          
-
-        <Slide transition={["fade"]} bgColor="secondary">
-          <Heading size={2} textColor="primary">Standard Type Structure</Heading>
-        </Slide>       
-
-        <Slide transition={["fade"]} bgColor="secondary">
-          <Image src={images.fileStruct.replace("/", "")} margin="0px auto 40px" height="100%"/>
-        </Slide>       
-        {/* 
-          Standard structure
-          Example of an app with two features - blog and shop
-          Divided by type / nature of each file
-         */}
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Pros</Heading>
-          <List>
-            <Appear><ListItem>Developer convience</ListItem></Appear>
-            <Appear><ListItem>Familiarity</ListItem></Appear>
-            <Appear><ListItem>KISS</ListItem></Appear>
-          </List>
-        </Slide>         
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Cons</Heading>
-          <List>
-            <Appear><ListItem>Scalability</ListItem></Appear>
-            <Appear><ListItem>Scattered files</ListItem></Appear>
-            <Appear><ListItem>Difficult to extract modules</ListItem></Appear>
-          </List>
-        </Slide>     
-        {/* Scatterd files - across code base when working on the same thing */}
-
-        {/* <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Feedback</Heading>
-          <List>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-            <Appear><ListItem>Foo</ListItem></Appear>
-          </List>
-        </Slide>     */}
-
-
-        <Slide transition={["fade"]} bgColor="secondary">
-          <Heading size={1} textColor="primary">Feature Structure</Heading>
-        </Slide>
-        {/* AKA by route or domain  */}
-
-        <Slide transition={["fade"]} bgColor="secondary">
-          <Image src={images.blogStruct.replace("/", "")} margin="0px auto 40px" height="100%"/>
-        </Slide>         
-
-        <Slide transition={["fade"]} bgColor="secondary">
-          <Image src={images.shopStruct.replace("/", "")} margin="0px auto 40px" height="100%"/>
-        </Slide>    
-        {/* 
-          - Document Driven Development
-          - Model..
-          - Public API for module
-          - Test for a module
-        */}
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Pros</Heading>
-          <List>
-            <Appear><ListItem>Reusability</ListItem></Appear>
-            <Appear><ListItem>Readibility</ListItem></Appear>
-            <Appear><ListItem>Disoverability</ListItem></Appear>
-            <Appear><ListItem>Scalability</ListItem></Appear>
-            <Appear><ListItem>Maintainability</ListItem></Appear>
-          </List>
-        </Slide>         
-        {/* 
-          - Resuability - eg drop data module into a React Native app
-          - Readibility - less noise
-          - Discoverability - everything is in one place not scattered
-          - Scalability 
-            - add as many features as you like compared to bloated standard structure
-            - possible micro services
-          - Maintainability - less conflicts if a true module
-        */}
-
-        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={4} textColor="primary">Cons</Heading>
-          <List>
-            <Appear><ListItem>YAGNI - You aren't gonna need it</ListItem></Appear>
-            <Appear><ListItem>More boilerplate</ListItem></Appear>
-            <Appear><ListItem>Gold plating</ListItem></Appear>
-            <Appear><ListItem>Developer convience</ListItem></Appear>
-          </List>
-        </Slide>   
-        {/* 
-          - YAGNI 
-            - principle of extreme programming
-            - do the simplest thing that is going to work
-          - More boilerplate - eg more files to create
-          - Dev convience - more files to jump around
-        */}
-
       </Deck>
     );
   }
