@@ -26,6 +26,7 @@ import createTheme from "spectacle/lib/themes/default";
 
 const images = {
   intro: require("../assets/typescript-generics.png"),
+  variance: require("../assets/variance.png"),
 };
 
 // Require CSS
@@ -51,13 +52,13 @@ x = 'foobar'
 export default class Presentation extends React.Component {
   render() {
     return (
-      <Deck transition={["zoom", "slide"]} transitionDuration={500} theme={theme} contentWidth={1400}>
+      <Deck transition={["zoom", "slide"]} transitionDuration={500} theme={theme} contentWidth={1600} contentHeight={1000}>
 
-        <Slide transition={["zoom"]} bgImage={images.intro.replace("/", "")}>
-        </Slide>
+        {/*<Slide transition={["zoom"]} bgImage={images.intro.replace("/", "")}>*/}
+        {/*</Slide>*/}
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={6} textColor="primary" caps>Generics</Heading>
+          <Heading size={6} textColor="primary" caps>TypeScript Generics</Heading>
           <List>
             <Appear><ListItem>A powerful tool for building reusable components</ListItem></Appear>
             <Appear><ListItem>Allows you to dynamically define <i>`type variables`</i> </ListItem></Appear>
@@ -245,6 +246,73 @@ class Screen extends React.Component<PropTypes, StateType> {
 `}
           </SyntaxHighlighter>
         </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Queue Component</Heading>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`/** QueueUI Component with a generic variable ItemT */
+type PropsType<ItemT> = {
+  items: ItemT[]
+}
+
+class QueueUI<ItemT> extends Component<PropsType<ItemT>> {
+  render() {
+    return (
+      <ul>
+        {/* item is of type ItemT */}
+        {this.props.items.map(item => <li>{item}</li>)}
+      </ul>
+    )
+  }
+}
+
+/** Usage - Setting ItemT as number */
+<QueueUI<number> items={[0, 1, 2, 3]} />
+`}
+          </SyntaxHighlighter>
+        </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Subclass Example</Heading>
+          <SyntaxHighlighter language="javascript" style={docco} customStyle={{textAlign:'left', margin: 0}}>
+            {`/** QueueUI Component with a generic subclass variable ItemT */
+type TitleT = { title: string }
+
+type PropsType<ItemT> = { items: ItemT[] }
+
+class QueueUI<ItemT extends TitleT> extends Component<PropsType<ItemT>> {
+  render() {
+    return (
+      <ul>
+        {/* item is of type ItemT extends TitleT */}
+        {this.props.items.map(item => <li>{item.title}</li>)}
+      </ul>
+    )
+  }
+}
+
+/** Usage - Setting ItemT as QueueItem */
+type QueueItem = { title: string }
+
+<QueueUI<QueueItem> items={[
+  {title: 'foo'},
+  {title: 'bar'},
+  {title: 'baz'},
+]}/>
+`}
+          </SyntaxHighlighter>
+        </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={6} textColor="primary" caps>Covariance and contravariance</Heading>
+          <List>
+            <ListItem>Occasionally causes issues when using subtypes</ListItem>
+            <ListItem>Further reading:</ListItem>
+            <ListItem>https://www.stephanboyer.com/post/132/what-are-covariance-and-contravariance</ListItem>
+          </List>
+          <Image src={images.variance.replace("/", "")} margin="0px auto 40px" height="100%"/>
+        </Slide>
+
       </Deck>
     );
   }
